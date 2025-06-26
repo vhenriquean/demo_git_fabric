@@ -6,7 +6,7 @@ expression base_transacoes = "C:\Users\victor.nascimento_in\Documents\Projetos O
 
 	annotation PBI_ResultType = Text
 
-expression data_inicial = #date(2025, 6, 1) meta [IsParameterQuery=true, Type="Date", IsParameterQueryRequired=true]
+expression data_inicial = #date(2024, 11, 1) meta [IsParameterQuery=true, Type="Date", IsParameterQueryRequired=true]
 	lineageTag: 1fd912e9-5232-428c-90ae-cb334716e47e
 	queryGroup: Parâmetros
 

@@ -7,6 +7,44 @@ table transacoes
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	measure 'Total R$' = ```
+			
+			SUMX(
+			    moedas,
+			    SUMX(
+			        calendario,
+			        COALESCE([Cotação corrigida], 1) * [Valor Total] 
+			    )
+			) 
+			```
+		displayFolder: Medidas
+		lineageTag: 176ab337-52bf-4e1f-b056-d3c34a44f790
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Cotação corrigida' = ```
+			
+			
+			VAR __DataCtx = MAX(calendario[Data]) 
+			
+			VAR __UltimaDataComCotacao = 
+			    CALCULATE(
+			        LASTNONBLANK(calendario[Data], [Cotação do dia]),
+			        calendario[Data] <= __DataCtx
+			    )
+			
+			RETURN
+			    CALCULATE(
+			        [Cotação do dia],
+			        calendario[Data] = __UltimaDataComCotacao
+			    )
+			
+			```
+		displayFolder: Medidas
+		lineageTag: 5b9a6a5a-6186-4cb8-bdf6-5a856d1ed82e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	column ID
 		dataType: double
 		displayFolder: Colunas
@@ -61,14 +99,9 @@ table transacoes
 				        null
 				    ),
 				    
-				    transacoes_Table = source{[Item="transacoes",Kind="Table"]}[Data],
-				    
-				    datesRestricted = Table.SelectRows(
-				        transacoes_Table, 
-				        each [Data] >= data_inicial and [Data] <= data_final
-				    )
+				    transacoes_Table = source{[Item="transacoes",Kind="Table"]}[Data]
 				in
-				    datesRestricted
+				    transacoes_Table
 				```
 
 	annotation PBI_NavigationStepName = Navegação
